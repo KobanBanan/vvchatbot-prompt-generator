@@ -39,7 +39,6 @@ class PromptGenerator:
         title_key = 'title'
         context_key = 'context'
         summaries_count = summaries_count if summaries_count < len(search_documents) else len(search_documents)
-        search_documents = search_documents[:summaries_count]
 
         message = '\n' + f'QUESTION: {query}\n' \
                          '=========\n' \
