@@ -49,7 +49,7 @@ class PromptGenerator:
             message += f'\n- {title_key}_{i}. {context_key}_{i} {source}'
 
         message += '\n=========\n' \
-                   'FINAL ANSWER: '
+                   'FINAL ANSWER:'
 
         for index, doc in enumerate(search_documents):
             title = doc[title_key]
