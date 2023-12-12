@@ -40,9 +40,9 @@ class PromptGenerator:
         context_key = 'context'
         summaries_count = summaries_count if summaries_count < len(search_documents) else len(search_documents)
 
-        message = '\n' + f'QUESTION: {query}\n' \
-                         '=========\n' \
-                         'SEARCH RESULT:'
+        message = f'QUESTION: {query}\n' \
+                  '=========\n' \
+                  'SEARCH RESULT:'
 
         for i in range(summaries_count):
             source = sources[i]
