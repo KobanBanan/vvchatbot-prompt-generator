@@ -53,7 +53,7 @@ class PromptGenerator:
         message += '\n=========\n' \
                    'FINAL ANSWER: '
 
-        for index, doc in enumerate(search_documents):
+        for index, doc in reversed(list(enumerate(search_documents))):
             title = doc[title_key]
             context = doc[context_key]
 
