@@ -26,7 +26,7 @@ class PromptGenerator:
 
     @staticmethod
     def _generate_dialogue_prompt(query: str):
-        return query, None
+        return query, {}
 
     def _generate_search_prompt(
             self, query: str, search_documents: List[Dict[str, str]], summaries_count: int = 6
@@ -43,12 +43,14 @@ class PromptGenerator:
         summaries_count = summaries_count if summaries_count < len(search_documents) else len(search_documents)
 
         message = f'QUESTION: {query}\n' \
-                         '=========\n' \
-                         'SEARCH RESULT:'
-
-        for i in range(summaries_count):
-            source = sources[i]
-            message += f'\n- {title_key}_{i}. {context_key}_{i} {source}'
+                  '=========\n' \
+                  'SEARCH RESULT:'
+        if sources:
+            for i in range(summaries_count):
+                source = sources[i]
+                message += f'\n- {title_key}_{i}. {context_key}_{i} {source}'
+        else:
+            message += '[]'
 
         message += '\n=========\n' \
                    'FINAL ANSWER: '
@@ -63,11 +65,30 @@ class PromptGenerator:
 
         return final_prompt, urls_and_sources
 
-    def generate(self, query: str, search_documents: List[Dict[str, str]], summaries_count: int = 6):
-        return self._generate_dialogue_prompt(query) if not search_documents else self._generate_search_prompt(
-            query, search_documents, summaries_count
-        )
+    def generate(
+            self,
+            query: str,
+            search_documents: List[Dict[str, str]],
+            summaries_count: int = 6,
+            force_search=False
+    ):
+        if search_documents or force_search:
+            return self._generate_search_prompt(query, search_documents, summaries_count)
+        else:
+            return self._generate_dialogue_prompt(query)
 
-    def __call__(self, query: str, search_documents: List[Dict[str, str]], summaries_count: int = 6, *args,
-                 **kwargs):
-        return self.generate(query, search_documents, summaries_count)
+    def __call__(
+            self,
+            query: str,
+            search_documents: List[Dict[str, str]],
+            summaries_count: int = 6,
+            force_search: bool = False,
+            *args,
+            **kwargs
+    ):
+        return self.generate(
+            query=query,
+            search_documents=search_documents,
+            summaries_count=summaries_count,
+            force_search=force_search
+        )
